@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const { builtinModules } = require('module');
 const userSchema = new mongoose.Schema(
 	{
 		firstName: {
@@ -38,8 +39,9 @@ const userSchema = new mongoose.Schema(
 			minlength: 6,
 			select: false,
 		},
-		contactNumber: { type: String },
-		pofilePicture: { type: String },
+		contactNumber: { type: Number, default: null },
+		profilePicture: { type: String, default: '' },
+		verified: { type: 'boolean', default: false },
 	},
 	{ timestamps: true },
 );
@@ -62,4 +64,5 @@ userSchema.methods.getSignedToken = function () {
 	});
 };
 
-mongoose.model('User', userSchema);
+const User = mongoose.model('User', userSchema);
+module.exports = { User };
