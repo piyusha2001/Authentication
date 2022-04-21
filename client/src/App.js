@@ -1,16 +1,24 @@
 import { Route, Routes } from 'react-router-dom';
 import PrivateRoute from './components/routing/PrivateRoute';
-import PrivateScreen from './components/screens/PrivateScreen';
-import LoginScreen from './components/screens/LoginScreen';
-import RegisterScreen from './components/screens/RegisterScreen';
+import LoginScreen from './components/Screens/LoginScreen';
+import PrivateScreen from './components/Screens/PrivateScreen';
+import RegisterScreen from './components/Screens/RegisterScreen';
+
 function App() {
 	return (
 		<Routes>
-			<div className='App'>
-				<PrivateRoute exact path='/' component={PrivateScreen} />
-				<Route exact path='/login' component={LoginScreen} />
-				<Route exact path='/register' component={RegisterScreen} />
-			</div>
+			<Route
+				exact
+				path='/'
+				element={
+					<PrivateRoute>
+						<PrivateScreen />
+					</PrivateRoute>
+				}
+			/>
+
+			<Route exact path='/login' element={<LoginScreen />} />
+			<Route exact path='/register' element={<RegisterScreen />} />
 		</Routes>
 	);
 }
