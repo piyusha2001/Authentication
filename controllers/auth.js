@@ -24,12 +24,12 @@ exports.register = async (req, res, next) => {
 		console.log(user);
 		const mailtoken = await new MailToken({
 			userId: user._id,
-			mailtoken: crypto.randomBytes(32).toString('hex'),
+			token: crypto.randomBytes(32).toString('hex'),
 		}).save();
 
 		console.log(mailtoken);
 
-		const url = `${process.env.BASE_URL}users/${user.id}/verify/${mailtoken.mailtoken}`;
+		const url = `${process.env.BASE_URL}users/${user.id}/verify/${mailtoken.token}`;
 		await sendEmail(user.email, 'Verify Email', url);
 
 		res.status(201).send({
@@ -42,6 +42,7 @@ exports.register = async (req, res, next) => {
 
 exports.verifyMailToken = async (req, res, next) => {
 	const user = await User.findOne({ _id: req.params.id });
+	console.log(user);
 	try {
 		if (!user)
 			return res
@@ -50,7 +51,7 @@ exports.verifyMailToken = async (req, res, next) => {
 
 		const mailtoken = await MailToken.findOne({
 			userId: user._id,
-			mailtoken: req.params.token,
+			token: req.params.token,
 		});
 		if (!mailtoken)
 			return res
@@ -58,7 +59,7 @@ exports.verifyMailToken = async (req, res, next) => {
 				.send({ success: false, message: 'Invalid link' });
 
 		await User.findOneAndUpdate({ _id: user._id }, { verified: true });
-		await token.remove();
+		await mailtoken.remove();
 
 		res.status(200).send({
 			success: true,
@@ -86,12 +87,16 @@ exports.login = async (req, res, next) => {
 		if (!isMatch) {
 			return next(new ErrorResponse('Invalid credentials', 401));
 		}
-		res.status(200).json({
-			success: true,
-			token: 'regtrgb',
-			message: 'User logged in successfully',
-		});
+		sendToken(user, 200, res);
 	} catch (err) {
 		next(error);
 	}
+};
+
+const sendToken = (user, statusCode, res) => {
+	const token = user.getSignedToken();
+	res.status(statusCode).json({
+		success: true,
+		token,
+	});
 };
