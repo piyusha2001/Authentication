@@ -1,41 +1,75 @@
 import React from 'react';
-import { Container, Nav, Navbar, NavDropdown } from 'react-bootstrap';
+import './Navbar.css';
+export default function Navbar() {
+	const handleLogout = () => {
+		localStorage.removeItem('authToken');
+		localStorage.removeItem('userData');
+		window.location.href = '/';
+	};
 
-const Navigation = () => {
+	const user = localStorage.getItem('userData');
+	const userData = JSON.parse(user);
+	console.log(user);
 	return (
-		<>
-			<Navbar bg='light' expand='lg'>
-				<Container>
-					<Navbar.Brand href='#home'>React-Bootstrap</Navbar.Brand>
-					<Navbar.Toggle aria-controls='basic-navbar-nav' />
-					<Navbar.Collapse id='basic-navbar-nav'>
-						<Nav className='me-auto'>
-							<Nav.Link href='#home'>Home</Nav.Link>
-							<Nav.Link href='#link'>Link</Nav.Link>
-							<NavDropdown
-								title='Dropdown'
-								id='basic-nav-dropdown'
-							>
-								<NavDropdown.Item href='#action/3.1'>
-									Action
-								</NavDropdown.Item>
-								<NavDropdown.Item href='#action/3.2'>
-									Another action
-								</NavDropdown.Item>
-								<NavDropdown.Item href='#action/3.3'>
-									Something
-								</NavDropdown.Item>
-								<NavDropdown.Divider />
-								<NavDropdown.Item href='#action/3.4'>
-									Separated link
-								</NavDropdown.Item>
-							</NavDropdown>
-						</Nav>
-					</Navbar.Collapse>
-				</Container>
-			</Navbar>
-		</>
+		<nav className='navbar navbar-expand-lg navbar-dark custom-navbar  '>
+			<div className='container-fluid'>
+				<a className='navbar-brand' href='/'>
+					NAVBAR
+				</a>
+				<button
+					className='navbar-toggler'
+					type='button'
+					data-bs-toggle='collapse'
+					data-bs-target='#navbarNav'
+					aria-controls='navbarNav'
+					aria-expanded='false'
+					aria-label='Toggle navigation'
+				>
+					<span className='navbar-toggler-icon'></span>
+				</button>
+				<div className='collapse navbar-collapse' id='navbarNav'>
+					<ul className='navbar-nav ms-auto'>
+						<li className='nav-item '>
+							<div className='dropdown '>
+								<a
+									className='btn btn-secondary dropdown-toggle custom-navbar nav-text'
+									type='button'
+									id='dropdownMenuButton1'
+									data-bs-toggle='dropdown'
+									style={{
+										border: '0',
+									}}
+									href
+								>
+									{userData.userName}
+								</a>
+								<ul
+									className='dropdown-menu'
+									aria-labelledby='dropdownMenuButton1'
+								>
+									<li>
+										<a
+											className='dropdown-item'
+											href='/profile'
+										>
+											My Profile
+										</a>
+									</li>
+									<li>
+										<a
+											className='dropdown-item'
+											href
+											onClick={handleLogout}
+										>
+											Logout
+										</a>
+									</li>
+								</ul>
+							</div>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
 	);
-};
-
-export default Navigation;
+}
