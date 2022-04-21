@@ -3,6 +3,7 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const authRoutes = require('./routes/auth');
+const profileRoutes = require('./routes/user');
 const connectDB = require('./config/db');
 const errorHandler = require('./middleware/error');
 
@@ -12,7 +13,7 @@ app.use(express.json());
 app.use(cors());
 
 app.use('/api/auth', authRoutes);
-
+app.use('/api/profile', profileRoutes);
 app.use(errorHandler);
 
 const PORT = process.env.PORT || 8080;
