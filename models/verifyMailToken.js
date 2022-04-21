@@ -8,7 +8,7 @@ const mailTokenSchema = new Schema({
 		ref: 'user',
 		unique: true,
 	},
-	mailtoken: { type: String, required: true },
+	token: { type: String, required: true },
 	createdAt: { type: Date, default: Date.now, expires: 3600 },
 });
 
