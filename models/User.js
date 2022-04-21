@@ -40,7 +40,7 @@ const userSchema = new mongoose.Schema(
 			select: false,
 		},
 		contactNumber: { type: Number, default: null },
-		profilePicture: { type: String, default: '' },
+
 		verified: { type: 'boolean', default: false },
 	},
 	{ timestamps: true },
