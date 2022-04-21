@@ -87,16 +87,22 @@ exports.login = async (req, res, next) => {
 		if (!isMatch) {
 			return next(new ErrorResponse('Invalid credentials', 401));
 		}
-		sendToken(user, 200, res);
+		const userData = {
+			firstName: user.firstName,
+			lastName: user.lastName,
+			userName: user.userName,
+			email: user.email,
+			contact: user.contactNumber,
+			id: user._id,
+		};
+		const authToken = user.getSignedToken();
+		res.status(200).send({
+			success: true,
+			message: 'You are logged in',
+			user: userData,
+			token: authToken,
+		});
 	} catch (err) {
 		next(error);
 	}
-};
-
-const sendToken = (user, statusCode, res) => {
-	const token = user.getSignedToken();
-	res.status(statusCode).json({
-		success: true,
-		token,
-	});
 };
