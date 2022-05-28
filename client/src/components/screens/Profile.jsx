@@ -14,31 +14,29 @@ function Profile() {
 	const [lastName, setLastName] = useState('');
 	const [userName, setUserName] = useState('');
 	const [email, setEmail] = useState('');
-	const [contact, setContact] = useState();
-	const user = localStorage.getItem('userData');
-	const userData = JSON.parse(user);
-	useEffect(() => {
-		if (user) {
-			const userData = JSON.parse(user);
-			setFirstName(userData.firstName);
-			setLastName(userData.lastName);
-			setUserName(userData.userName);
-			setEmail(userData.email);
-			setContact(userData.contact);
-		}
-	}, [user]);
+	const [contact, setContact] = useState('');
 
-	const updatedProfile = {
-		_id: userData.id,
-		firstName: firstName,
-		lastName: lastName,
-		userName: userName,
-		email: email,
-		contactNumber: contact,
-	};
+	useEffect(() => {
+		const userData = JSON.parse(localStorage.getItem('userData'));
+		setFirstName(userData.firstName);
+		setLastName(userData.lastName);
+		setUserName(userData.userName);
+		setEmail(userData.email);
+		setContact(userData.contactNumber);
+	}, []);
 
 	const updateHandler = async (e) => {
 		e.preventDefault();
+		const userData = JSON.parse(localStorage.getItem('userData'));
+		const updatedProfile = {
+			_id: userData._id,
+			firstName: firstName,
+			lastName: lastName,
+			userName: userName,
+			email: email,
+			contactNumber: parseInt(contact),
+		};
+
 		const config = {
 			headers: {
 				'Content-Type': 'application/json',
@@ -46,15 +44,16 @@ function Profile() {
 		};
 
 		try {
-			const { data } = await axios.post(
+			const { data: res } = await axios.post(
 				'http://localhost:8080/api/profile/updateprofile',
 				{
 					updatedProfile,
 				},
 				config,
 			);
-			console.log(data);
-			localStorage.setItem('userData', JSON.stringify(data.user));
+			console.log(res.message);
+			localStorage.setItem('userData', JSON.stringify(res.user));
+
 			alert('Profile Updated Successfully');
 		} catch (error) {
 			console.log(error);
