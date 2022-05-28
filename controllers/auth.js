@@ -93,7 +93,7 @@ exports.login = async (req, res, next) => {
 			userName: user.userName,
 			email: user.email,
 			contact: user.contactNumber,
-			id: user._id,
+			_id: user._id,
 		};
 		const authToken = user.getSignedToken();
 		res.status(200).send({
