@@ -24,7 +24,15 @@ function App() {
 			<Route exact path='/login' element={<LoginScreen />} />
 			<Route exact path='/register' element={<RegisterScreen />} />
 			<Route path='users/:id/verify/:token' element={<EmailVerify />} />
-			<Route exact path='/profile' element={<Profile />} />
+			<Route
+				exact
+				path='/profile'
+				element={
+					<PrivateRoute>
+						<Profile />
+					</PrivateRoute>
+				}
+			/>
 		</Routes>
 	);
 }
